@@ -121,9 +121,7 @@ JOIN mata_kuliah mk   ON k.KodeMK = mk.KodeMK;
 SELECT
     Angkatan,
     COUNT(*)          AS jumlah_mahasiswa,
-    ROUND(AVG(IPK), 2)  AS rata_rata_ipk,
-    ROUND(MIN(IPK), 2)  AS ipk_terendah,
-    ROUND(MAX(IPK), 2)  AS ipk_tertinggi
+    ROUND(AVG(IPK), 2)  AS rata_rata_ipk
 FROM mahasiswa
 GROUP BY Angkatan
 ORDER BY Angkatan;
