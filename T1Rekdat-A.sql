@@ -6,6 +6,38 @@ SELECT * FROM mata_kuliah;
 SELECT * FROM krs;
 SELECT * FROM dosen;
 
+-- NO 2
+SELECT * FROM mahasiswa WHERE NPM IS NULL 
+   OR Nama IS NULL 
+   OR Angkatan IS NULL 
+   OR Prodi IS NULL 
+   OR IPK IS NULL;
+
+SELECT * FROM dosen WHERE NIDN IS NULL 
+   OR NamaDosen IS NULL 
+   OR Prodi IS NULL;
+
+SELECT * FROM mata_kuliah WHERE KodeMK IS NULL 
+   OR NamaMK IS NULL 
+   OR SKS IS NULL 
+   OR Prodi IS NULL;
+
+SELECT * FROM krs WHERE NPM IS NULL 
+   OR KodeMK IS NULL 
+   OR Semester IS NULL 
+   OR Nilai IS NULL;
+
+-- NO 3
+-- Cek apakah ada duplikasi di tabel krs
+SELECT 
+    NPM, 
+    KodeMK, 
+    Semester, 
+    COUNT(*) AS jumlah_data
+FROM krs
+GROUP BY NPM, KodeMK, Semester
+HAVING COUNT(*) > 1;
+
 -- 	NO 16
 SELECT
     mk.SKS,
