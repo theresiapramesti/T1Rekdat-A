@@ -38,6 +38,39 @@ FROM krs
 GROUP BY NPM, KodeMK, Semester
 HAVING COUNT(*) > 1;
 
+-- 	NO 11
+SELECT KodeMK, COUNT(NPM) AS Jumlah_Mhs
+FROM krs
+GROUP BY KodeMK
+HAVING COUNT(NPM) >= 3;
+
+--   NO 12
+SELECT DISTINCT m.Nama 
+FROM mahasiswa m
+JOIN krs k ON m.NPM = k.NPM
+JOIN mata_kuliah mk ON k.KodeMK = mk.KodeMK
+WHERE mk.SKS = (SELECT MAX(SKS) FROM mata_kuliah);
+
+--   NO 13
+SELECT Nama FROM mahasiswa 
+WHERE NPM NOT IN (SELECT NPM FROM krs WHERE KodeMK = 'IF101');
+
+--   NO 14
+SELECT Nama FROM mahasiswa 
+WHERE NPM IN (SELECT NPM FROM krs) 
+AND NPM NOT IN (
+    SELECT k.NPM FROM krs k 
+    JOIN mata_kuliah mk ON k.KodeMK = mk.KodeMK 
+    WHERE mk.SKS <> 3
+);
+
+--   NO 15
+SELECT m.Nama, m.IPK, COUNT(k.KodeMK) AS Total_MK
+FROM mahasiswa m
+LEFT JOIN krs k ON m.NPM = k.NPM
+GROUP BY m.NPM, m.Nama, m.IPK
+ORDER BY m.IPK DESC;
+
 -- 	NO 16
 SELECT
     mk.SKS,
