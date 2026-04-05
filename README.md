@@ -8,5 +8,5 @@ Tugas 1 Mata Kuliah Rekayasa Data
 4. 6162201109 - Sammy Alexis
 
 ## Lampiran
-* **Link Prompt AI:** [Klik di sini untuk melihat percakapan AI](URL_LINK_ANDA)
-* **File SQL:** Berisi kueri untuk soal nomor 1-20.
+* **Link Prompt AI  :** [Klik di sini untuk melihat percakapan AI](URL_LINK_ANDA)
+* **File SQL        :** Berisi kueri untuk soal nomor 1-20.
