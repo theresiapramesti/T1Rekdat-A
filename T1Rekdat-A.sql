@@ -38,6 +38,89 @@ FROM krs
 GROUP BY NPM, KodeMK, Semester
 HAVING COUNT(*) > 1;
 
+-- NO 6
+SELECT table_name, column_name
+FROM information_schema.columns
+WHERE table_schema = 'universitas'
+  AND table_name IN ('dosen', 'krs', 'mahasiswa', 'mata_kuliah')
+  AND numeric_precision IS NOT NULL;
+
+SELECT 'mahasiswa' AS tabel, 'IPK' AS kolom, MIN(IPK) AS nilai_min, MAX(IPK) AS nilai_max, AVG(IPK) AS rata_rata, STDDEV(IPK) AS standar_deviasi FROM universitas.mahasiswa
+UNION ALL
+SELECT 'mahasiswa', 'Angkatan', MIN(Angkatan), MAX(Angkatan), AVG(Angkatan), STDDEV(Angkatan) FROM universitas.mahasiswa
+UNION ALL
+SELECT 'mata_kuliah', 'SKS', MIN(SKS), MAX(SKS), AVG(SKS), STDDEV(SKS) FROM universitas.mata_kuliah
+UNION ALL
+SELECT 'krs', 'Semester', MIN(Semester), MAX(Semester), AVG(Semester), STDDEV(Semester) FROM universitas.krs;
+SELECT 'krs', 'Semester', MIN(Semester), MAX(Semester), AVG(Semester), STDDEV(Semester) FROM universitas.krs;
+
+
+-- NO 7 
+-- Mahasiswa: Prodi
+SELECT Prodi, COUNT(*) AS frekuensi
+FROM universitas.mahasiswa
+GROUP BY Prodi;
+
+-- Dosen: Prodi
+SELECT Prodi, COUNT(*) AS frekuensi
+FROM universitas.dosen
+GROUP BY Prodi;
+
+-- Mata Kuliah: Prodi
+SELECT Prodi, COUNT(*) AS frekuensi
+FROM universitas.mata_kuliah
+GROUP BY Prodi;
+
+-- KRS: KodeMK (frekuensi pengambilan mata kuliah)
+SELECT KodeMK, COUNT(*) AS frekuensi
+FROM universitas.krs
+GROUP BY KodeMK;
+
+-- KRS: Nilai
+SELECT Nilai, COUNT(*) AS frekuensi
+FROM universitas.krs
+GROUP BY Nilai;
+
+-- NO 8
+SELECT Nama, IPK
+FROM universitas.mahasiswa
+WHERE IPK > (SELECT AVG(IPK) FROM universitas.mahasiswa)
+ORDER BY IPK DESC;
+
+-- NO 9
+SELECT 
+    m.Nama AS Nama_Mahasiswa, 
+    m.Prodi AS Prodi_Mahasiswa, 
+    mk.NamaMK AS Mata_Kuliah_Diambil, 
+    mk.Prodi AS Prodi_Penyelenggara
+FROM universitas.mahasiswa m
+JOIN universitas.krs k ON m.NPM = k.NPM
+JOIN universitas.mata_kuliah mk ON k.KodeMK = mk.KodeMK
+WHERE m.NPM IN (
+    -- Subquery: Mencari NPM yang mengambil MK dengan Prodi berbeda
+    SELECT k2.NPM 
+    FROM universitas.krs k2
+    JOIN universitas.mata_kuliah mk2 ON k2.KodeMK = mk2.KodeMK
+    JOIN universitas.mahasiswa m2 ON k2.NPM = m2.NPM
+    WHERE m2.Prodi <> mk2.Prodi
+)
+ORDER BY m.Nama, mk.NamaMK;
+
+-- NO 10
+SELECT 
+    m.NPM, 
+    m.Nama, 
+    COUNT(k.KodeMK) AS Jumlah_Mata_Kuliah
+FROM universitas.mahasiswa m
+LEFT JOIN universitas.krs k ON m.NPM = k.NPM
+GROUP BY m.NPM, m.Nama
+ORDER BY Jumlah_Mata_Kuliah DESC;
+-- 	NO 11
+SELECT KodeMK, COUNT(NPM) AS Jumlah_Mhs
+FROM krs
+GROUP BY KodeMK
+HAVING COUNT(NPM) >= 3;
+
 -- 	NO 11
 SELECT KodeMK, COUNT(NPM) AS Jumlah_Mhs
 FROM krs
